@@ -30,7 +30,7 @@ This project provides a basic structure for a job portal application built with 
 2. Navigate to the project directory:
 
 ```Bash
-   cd user 
+   cd server 
 ```
 
 3. Install dependencies:
@@ -42,10 +42,13 @@ This project provides a basic structure for a job portal application built with 
 4. Usage
 
 Configure your database connection details in the backend configuration file (e.g., config.ts).
+
 The frontend development process will depend on your chosen frontend framework (React is a common choice). Refer to the specific framework's documentation for development instructions.
 
 ###  Roadmap
 
 Add basic functionalities for job posting, searching, and applying.
+
 Implement user authentication and authorization.
+
 Integrate frontend and backend for a complete job portal experience.
