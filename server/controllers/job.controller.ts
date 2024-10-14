@@ -58,3 +58,30 @@ export const getSingleJob = CatchAsyncError(
     }
   }
 );
+
+
+
+
+// edit course
+export const editJob = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobData = req.body;
+      
+      const jobId = req.params.id;
+
+      const course = await JobModel.findByIdAndUpdate(
+        jobId,
+        { $set: jobData },
+        { new: true }
+      );
+
+      res.status(201).json({
+        success: true,
+        jobData,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
