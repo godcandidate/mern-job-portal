@@ -1,12 +1,11 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, Router } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
-
+import router from './routes/route';
 
 
 const app = express();
-
 //body parser
 app.use(express.json({limit: "50mb"}));
 
@@ -17,6 +16,11 @@ app.use(cookieParser());
 app.use(cors({
   origin: process.env.ORIGIN
 }));
+
+app.use(
+  "/api/v1/",
+  router
+);
 
 
 //testing api
