@@ -21,3 +21,19 @@ export const uploadJob = CatchAsyncError(
     }
   }
 );
+
+export const getAllJobs = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {      
+        const jobs = await JobModel.find();
+
+        res.status(200).json({
+          success: true,
+          jobs
+        });
+      
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
