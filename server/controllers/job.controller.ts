@@ -22,6 +22,7 @@ export const uploadJob = CatchAsyncError(
   }
 );
 
+//get all jobs
 export const getAllJobs = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {      
@@ -30,6 +31,26 @@ export const getAllJobs = CatchAsyncError(
         res.status(200).json({
           success: true,
           jobs
+        });
+      
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+
+//get a single a job
+export const getSingleJob = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {      
+        const job_id = req.params.id;
+
+        const job = await JobModel.findById(job_id)
+
+        res.status(200).json({
+          success: true,
+          job
         });
       
     } catch (error: any) {
