@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllJobs, getSingleJob, uploadJob } from "../controllers/job.controller";
+import { editJob, getAllJobs, getSingleJob, uploadJob } from "../controllers/job.controller";
 
 const router = express.Router();
 
@@ -7,5 +7,6 @@ const router = express.Router();
 router.post("/post-job", uploadJob);
 router.get("/all-jobs", getAllJobs);
 router.get("/jobs/:id", getSingleJob);
+router.put("/jobs/:id", editJob);
 
 export default router;
