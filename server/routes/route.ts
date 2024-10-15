@@ -14,7 +14,7 @@ router.post("/refresh", updateAccessToken);
 router.get("/me", isAuthenticated, getUserInfo);
 
 //Job routes
-router.post("/post-job", uploadJob);
+router.post("/post-job", uploadJob, isAuthenticated);
 router.get("/all-jobs", getAllJobs);
 router.get("/jobs/:id", getSingleJob);
 router.put("/jobs/:id", editJob);
