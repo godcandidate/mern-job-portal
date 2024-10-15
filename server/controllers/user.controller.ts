@@ -6,9 +6,10 @@ import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendEmail";
+import { redis } from "../utils/redis";
 
 import "dotenv/config";
-import { sendToken } from "../utils/jwt";
+import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt";
 
 
 //using interface for req.user
@@ -171,6 +172,28 @@ export const loginUser = CatchAsyncError(
         return next(new ErrorHandler("Invalid email or password", 400));
       }
       sendToken(user, 200, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+//logout user
+export const logoutUser = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.cookie("access_token", "", { maxAge: 1 });
+      res.cookie("refresh_token", "", { maxAge: 1 });
+
+      // delete cache from redis
+      const userId = req.user?._id as string;
+
+      redis.del(userId);
+
+      res.status(200).json({
+        success: true,
+        message: "logged out successfully",
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
