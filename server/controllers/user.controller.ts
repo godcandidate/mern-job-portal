@@ -23,13 +23,14 @@ interface IRegistrationBody {
   email: string;
   password: string;
   avatar?: string;
+  role: string;
 }
 
 //Register user
 export const registerUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password , role} = req.body;
 
       //Check if email already exists
       const isEmailExist = await userModel.findOne({ email });
@@ -41,6 +42,7 @@ export const registerUser = CatchAsyncError(
         name,
         email,
         password,
+        role
       };
 
       const activationToken = createActivationToken(user);
@@ -118,7 +120,7 @@ export const activateUser = CatchAsyncError(
         return next(new ErrorHandler("Invalid activation code", 400));
       }
 
-      const { name, email, password } = newUser.user;
+      const { name, email, password, role } = newUser.user;
 
       const existUser = await userModel.findOne({ email });
 
@@ -129,6 +131,7 @@ export const activateUser = CatchAsyncError(
         name,
         email,
         password,
+        role,
         isVerified: true
       });
 
