@@ -9,8 +9,11 @@ import sendMail from "../utils/sendEmail";
 import { redis } from "../utils/redis";
 
 import "dotenv/config";
-import { accessTokenOptions, refreshTokenOptions, sendToken } from "../utils/jwt";
-
+import {
+  accessTokenOptions,
+  refreshTokenOptions,
+  sendToken,
+} from "../utils/jwt";
 
 //using interface for req.user
 declare module "express" {
@@ -32,7 +35,7 @@ interface IRegistrationBody {
 export const registerUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, email, password , role} = req.body;
+      const { name, email, password, role } = req.body;
 
       //Check if email already exists
       const isEmailExist = await userModel.findOne({ email });
@@ -44,7 +47,7 @@ export const registerUser = CatchAsyncError(
         name,
         email,
         password,
-        role
+        role,
       };
 
       const activationToken = createActivationToken(user);
@@ -134,7 +137,7 @@ export const activateUser = CatchAsyncError(
         email,
         password,
         role,
-        isVerified: true
+        isVerified: true,
       });
 
       res.status(201).json({
@@ -249,6 +252,28 @@ export const updateAccessToken = CatchAsyncError(
         success: true,
         accessToken,
       });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// get user info
+export const getUserInfo = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user?._id as string;
+
+      const userJson = await redis.get(userId);
+
+      if (userJson) {
+        const user = JSON.parse(userJson);
+
+        res.status(200).json({
+          success: true,
+          user,
+        });
+      }
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
